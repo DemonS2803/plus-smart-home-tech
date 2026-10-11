@@ -1,6 +1,6 @@
 package ru.yandex.practicum.telemetry.collector.broker;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -11,11 +11,11 @@ import ru.yandex.practicum.telemetry.common.utils.KafkaConstants;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class TelemetryCollectorMessageBrokerImpl implements TelemetryCollectorMessageBroker {
 
-    KafkaProducer<String, HubEventAvro> hubEventProducer;
-    KafkaProducer<String, SensorEventAvro> sensorEventProducer;
+    private final KafkaProducer<String, HubEventAvro> hubEventProducer;
+    private final KafkaProducer<String, SensorEventAvro> sensorEventProducer;
 
     @Override
     public void sendHubEvent(HubEventAvro event) {
