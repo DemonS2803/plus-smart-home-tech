@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,6 +17,12 @@ public class TemperatureSensorEvent extends SensorEvent {
 
     private int temperatureC;
     private int temperatureF;
+
+    public TemperatureSensorEvent(String id, String hubId, Instant timestamp, int temperatureC, int temperatureF) {
+        super(id, hubId, timestamp);
+        this.temperatureC = temperatureC;
+        this.temperatureF = temperatureF;
+    }
 
     @Override
     public SensorEventType getType() {

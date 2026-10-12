@@ -19,6 +19,11 @@
         </dependency>
         <dependency>
             <groupId>ru.yandex.practicum</groupId>
+            <artifactId>proto-schemas</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>ru.yandex.practicum</groupId>
             <artifactId>telemetry-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

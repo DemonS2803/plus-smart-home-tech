@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,6 +16,13 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class ScenarioRemovedEvent extends HubEvent {
 
     private String name;
+
+    public ScenarioRemovedEvent(String hubId, Instant timestamp, String name) {
+        super();
+        setHubId(hubId);
+        setTimestamp(timestamp);
+        this.name = name;
+    }
 
     @Override
     public HubEventType getType() {

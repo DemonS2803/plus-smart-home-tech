@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,6 +16,11 @@ import lombok.Setter;
 public class SwitchSensorEvent extends SensorEvent {
 
     private boolean state;
+
+    public SwitchSensorEvent(String id, String hubId, Instant timestamp, boolean state) {
+        super(id, hubId, timestamp);
+        this.state = state;
+    }
 
     @Override
     public SensorEventType getType() {

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,6 +18,13 @@ public class MotionSensorEvent extends SensorEvent {
     private int linkQuality;
     private boolean motion;
     private int voltage;
+
+    public MotionSensorEvent(String id, String hubId, Instant timestamp, int linkQuality, boolean motion, int voltage) {
+        super(id, hubId, timestamp);
+        this.linkQuality = linkQuality;
+        this.motion = motion;
+        this.voltage = voltage;
+    }
 
     @Override
     public SensorEventType getType() {
