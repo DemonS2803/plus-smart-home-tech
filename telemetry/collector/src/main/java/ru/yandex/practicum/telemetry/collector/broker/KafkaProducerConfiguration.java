@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
-import ru.yandex.practicum.telemetry.serialization.avroschemas.HubEventAvroSerializer;
-import ru.yandex.practicum.telemetry.serialization.avroschemas.SensorEventAvroSerializer;
+import ru.yandex.practicum.telemetry.serialization.avroschemas.serialize.HubEventAvroSerializer;
+import ru.yandex.practicum.telemetry.serialization.avroschemas.serialize.SensorEventAvroSerializer;
 
 import java.util.Properties;
 

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.collector.service;
+package ru.yandex.practicum.telemetry.collector.app;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,8 +8,8 @@ import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.telemetry.collector.broker.TelemetryCollectorMessageBroker;
 import ru.yandex.practicum.telemetry.common.entity.event.hub.HubEvent;
 import ru.yandex.practicum.telemetry.common.entity.event.sensor.SensorEvent;
-import ru.yandex.practicum.telemetry.serialization.avroschemas.HubEventAvroMapper;
-import ru.yandex.practicum.telemetry.serialization.avroschemas.SensorEventAvroMapper;
+import ru.yandex.practicum.telemetry.serialization.avroschemas.mapper.HubEventAvroMapper;
+import ru.yandex.practicum.telemetry.serialization.avroschemas.mapper.SensorEventAvroMapper;
 
 @Slf4j
 @Service

@@ -3,7 +3,7 @@ package ru.yandex.practicum.telemetry.collector.handler.sensorevent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.grpc.telemetry.event.SensorEventProto;
-import ru.yandex.practicum.telemetry.collector.service.TelemetryService;
+import ru.yandex.practicum.telemetry.collector.app.TelemetryService;
 import ru.yandex.practicum.telemetry.common.entity.event.sensor.LightSensorEvent;
 
 import java.time.Instant;

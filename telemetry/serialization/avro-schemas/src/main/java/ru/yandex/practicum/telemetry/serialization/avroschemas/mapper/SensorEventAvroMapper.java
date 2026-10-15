@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.serialization.avroschemas;
+package ru.yandex.practicum.telemetry.serialization.avroschemas.mapper;
 
 import ru.yandex.practicum.kafka.telemetry.event.*;
 import ru.yandex.practicum.telemetry.common.entity.event.sensor.*;

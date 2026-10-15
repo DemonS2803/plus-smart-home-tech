@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.collector.service;
+package ru.yandex.practicum.telemetry.collector.app;
 
 import com.google.protobuf.Empty;
 import io.grpc.Status;
@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @GrpcService
 public class TelemetryControllerGrpc extends CollectorControllerGrpc.CollectorControllerImplBase {
 
-    private final TelemetryService telemetryService;
     private final Map<HubEventProto.PayloadCase, HubEventHandler> hubEventHandlers;
     private final Map<SensorEventProto.PayloadCase, SensorEventHandler> sensorEventHandlers;
 
@@ -30,7 +29,6 @@ public class TelemetryControllerGrpc extends CollectorControllerGrpc.CollectorCo
             Set<HubEventHandler> hubEventHandlers,
             Set<SensorEventHandler> sensorEventHandlers
     ) {
-        this.telemetryService = telemetryService;
         this.hubEventHandlers = hubEventHandlers.stream()
                 .collect(Collectors.toMap(
                         HubEventHandler::getMessageType,

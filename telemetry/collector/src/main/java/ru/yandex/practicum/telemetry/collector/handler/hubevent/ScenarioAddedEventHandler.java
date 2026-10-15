@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.grpc.telemetry.event.HubEventProto;
 import ru.yandex.practicum.grpc.telemetry.event.ScenarioConditionProto;
 import ru.yandex.practicum.grpc.telemetry.event.DeviceActionProto;
-import ru.yandex.practicum.telemetry.collector.service.TelemetryService;
+import ru.yandex.practicum.telemetry.collector.app.TelemetryService;
 import ru.yandex.practicum.telemetry.common.entity.event.hub.DeviceAction;
 import ru.yandex.practicum.telemetry.common.entity.event.hub.ScenarioAddedEvent;
 import ru.yandex.practicum.telemetry.common.entity.event.hub.ScenarioCondition;

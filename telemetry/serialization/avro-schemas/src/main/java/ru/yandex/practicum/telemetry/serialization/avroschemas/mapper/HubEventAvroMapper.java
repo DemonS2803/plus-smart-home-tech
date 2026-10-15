@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.serialization.avroschemas;
+package ru.yandex.practicum.telemetry.serialization.avroschemas.mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
