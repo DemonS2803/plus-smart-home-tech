@@ -13,4 +13,8 @@ public class KafkaConstants {
     public static final String CONSUMER_GROUP_HUB_EVENTS = "group.hub-events";
     public static final String CONSUMER_GROUP_SNAPSHOTS = "group.snapshots";
 
+    public static final String CLIENT_AGGREGATOR_SENSORS = "client.consumer.aggregator.sensors";
+    public static final String CLIENT_ANALYZER_HUB_CONSUMER = "client.consumer.analyzer.hub";
+    public static final String CLIENT_ANALYZER_SNAPSHOTS_CONSUMER = "client.consumer.analyzer.snapshots";
+
 }

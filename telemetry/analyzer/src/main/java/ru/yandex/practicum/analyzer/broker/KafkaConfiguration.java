@@ -23,38 +23,37 @@ public class KafkaConfiguration {
     private Properties snapshotConsumerConfig() {
         Properties config = new Properties();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+        config.put(ConsumerConfig.CLIENT_ID_CONFIG, KafkaConstants.CLIENT_ANALYZER_SNAPSHOTS_CONSUMER);
         config.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConstants.CONSUMER_GROUP_SNAPSHOTS);
-        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, SensorsSnapshotAvroDeserializer.class.getName());
+        config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         return config;
     }
 
     private Properties hubEventConsumerConfig() {
         Properties config = new Properties();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
+        config.put(ConsumerConfig.CLIENT_ID_CONFIG, KafkaConstants.CLIENT_ANALYZER_HUB_CONSUMER);
         config.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConstants.CONSUMER_GROUP_HUB_EVENTS);
-        config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
-        config.put(ConsumerConfig.FETCH_MIN_BYTES_CONFIG, 1);
-        config.put(ConsumerConfig.FETCH_MAX_WAIT_MS_CONFIG, 0);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, HubEventAvroDeserializer.class.getName());
+        config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         return config;
     }
 
     @Bean
     public KafkaConsumer<String, SensorsSnapshotAvro> snapshotConsumer() {
-        KafkaConsumer<String, SensorsSnapshotAvro> consumer =
-                new KafkaConsumer<>(snapshotConsumerConfig());
+        KafkaConsumer<String, SensorsSnapshotAvro> consumer = new KafkaConsumer<>(snapshotConsumerConfig());
         consumer.subscribe(java.util.Collections.singletonList(KafkaConstants.TOPIC_TELEMETRY_SNAPSHOTS_V1));
         return consumer;
     }
 
     @Bean
     public KafkaConsumer<String, HubEventAvro> hubEventConsumer() {
-        KafkaConsumer<String, HubEventAvro> consumer =
-                new KafkaConsumer<>(hubEventConsumerConfig());
+        KafkaConsumer<String, HubEventAvro> consumer = new KafkaConsumer<>(hubEventConsumerConfig());
         consumer.subscribe(java.util.Collections.singletonList(KafkaConstants.TOPIC_TELEMETRY_HUBS_V1));
         return consumer;
     }
+
 }

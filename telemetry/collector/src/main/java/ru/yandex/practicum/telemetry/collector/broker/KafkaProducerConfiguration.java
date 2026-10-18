@@ -42,7 +42,7 @@ public class KafkaProducerConfiguration {
         Properties properties = defaultConfig();
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, SensorEventAvroSerializer.class);
         properties.put(ProducerConfig.LINGER_MS_CONFIG, 1000);
-        properties.put(ProducerConfig.BATCH_SIZE_CONFIG, 2);
+        properties.put(ProducerConfig.BATCH_SIZE_CONFIG, 1000);
         return new KafkaProducer<>(properties);
     }
 

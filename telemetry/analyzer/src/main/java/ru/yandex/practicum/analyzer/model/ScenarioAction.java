@@ -15,6 +15,9 @@ public class ScenarioAction {
     @EmbeddedId
     private ScenarioActionId id;
 
+    // не спрашивайте, зачем такой маппинг
+    // сущностей, просто захотелось сделать
+    // 1 в 1 с таблицами
     @ManyToOne(
         fetch = FetchType.EAGER
     )
