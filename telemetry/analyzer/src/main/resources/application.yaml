@@ -6,6 +6,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/telemetry_analyzer
     username: dbuser
     password: 12345
+  sql:
+    init:
+      mode: always
   jpa:
     hibernate:
       ddl-auto: validate
