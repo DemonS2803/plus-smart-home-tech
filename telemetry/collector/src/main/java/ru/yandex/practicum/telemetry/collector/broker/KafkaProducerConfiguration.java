@@ -32,6 +32,7 @@ public class KafkaProducerConfiguration {
     public KafkaProducer<String, HubEventAvro> hubEventProducer() {
         Properties properties = defaultConfig();
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, HubEventAvroSerializer.class);
+        properties.put(ProducerConfig.LINGER_MS_CONFIG, 100);
         return new KafkaProducer<>(properties);
     }
 

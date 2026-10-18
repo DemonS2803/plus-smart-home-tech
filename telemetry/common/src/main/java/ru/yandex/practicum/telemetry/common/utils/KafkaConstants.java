@@ -10,5 +10,7 @@ public class KafkaConstants {
     public static final String TOPIC_TELEMETRY_SNAPSHOTS_V1 = TOPIC_TELEMETRY + ".snapshots.v1";
 
     public static final String CONSUMER_GROUP_AGGREGATOR = "group.aggregator";
+    public static final String CONSUMER_GROUP_HUB_EVENTS = "group.hub-events";
+    public static final String CONSUMER_GROUP_SNAPSHOTS = "group.snapshots";
 
 }

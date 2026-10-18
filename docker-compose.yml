@@ -38,12 +38,16 @@ services:
     image: postgres:16.1
     container_name: postgres
     hostname: postgres
+    ports:
+      - "5432:5432"
+      - "5431:5431"
     environment:
       POSTGRES_USER: dbuser
       POSTGRES_PASSWORD: 12345
       POSTGRES_DB: telemetry_analyzer
     volumes:
-      - ./docker/init-databases.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./docker/00-init-databases.sql:/docker-entrypoint-initdb.d/00-init-databases.sql
+      - ./docker/01-create-tables.sql:/docker-entrypoint-initdb.d/01-create-tables.sql
     healthcheck:
       test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
       timeout: 5s
@@ -51,5 +55,4 @@ services:
       retries: 10
     #    volumes:
     #      - postgres:/data/postgres
-    ports:
-      - "5432:5432"
+
