@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class SensorSnapshotProcessor extends Thread {
+public class SensorSnapshotRunner extends Thread {
 
     @Getter
     private final KafkaConsumer<String, SensorsSnapshotAvro> snapshotConsumer;
@@ -71,6 +71,7 @@ public class SensorSnapshotProcessor extends Thread {
 
     private void processRecords(Iterable<ConsumerRecord<String, SensorsSnapshotAvro>> records) {
         for (ConsumerRecord<String, SensorsSnapshotAvro> record : records) {
+            log.info("Processing snapshot event record {}", record.offset());
             scenarioService.processEvent(record.value());
             snapshotConsumer.commitSync(
                     Collections.singletonMap(
@@ -78,6 +79,7 @@ public class SensorSnapshotProcessor extends Thread {
                             new OffsetAndMetadata(record.offset() + 1, null)
                     )
             );
+            log.info("Finish processing snapshot event record {}", record.offset());
         }
     }
 

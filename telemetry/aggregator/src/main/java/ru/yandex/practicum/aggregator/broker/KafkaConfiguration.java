@@ -38,10 +38,7 @@ public class KafkaConfiguration {
         Properties properties = defaultConfig();
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, SensorSnapshotAvroSerializer.class);
-//        properties.put(ProducerConfig.RETRIES_CONFIG, 3);
-//        properties.put(ProducerConfig.BATCH_SIZE_CONFIG, 16384);
-//        properties.put(ProducerConfig.LINGER_MS_CONFIG, 1);
-//        properties.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
+        properties.put(ProducerConfig.LINGER_MS_CONFIG, 100);
 
         return new KafkaProducer<>(properties);
     }
@@ -52,8 +49,7 @@ public class KafkaConfiguration {
         properties.put(ConsumerConfig.GROUP_ID_CONFIG, KafkaConstants.CONSUMER_GROUP_AGGREGATOR);
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, SensorEventDeserializer.class.getName());
-//        properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-//        properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+
         return new KafkaConsumer<>(properties);
     }
 

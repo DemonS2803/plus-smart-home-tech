@@ -27,9 +27,3 @@ grpc:
   server:
     port: 59093
 
-app:
-  consumer:
-    snapshots:
-      group-id: group.analyzer.snapshots
-    hub-events:
-      group-id: group.analyzer.hub-events

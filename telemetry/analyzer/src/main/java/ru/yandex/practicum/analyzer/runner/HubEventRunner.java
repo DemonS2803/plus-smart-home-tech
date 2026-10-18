@@ -17,7 +17,7 @@ import java.util.*;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class HubEventProcessor implements Runnable {
+public class HubEventRunner implements Runnable {
 
     @Getter
     private final KafkaConsumer<String, HubEventAvro> hubEventConsumer;
@@ -32,7 +32,6 @@ public class HubEventProcessor implements Runnable {
                     Iterable<ConsumerRecord<String, HubEventAvro>> records =
                         hubEventConsumer.poll(Duration.ofSeconds(1));
                     processRecords(records);
-
                 } catch (Exception e) {
                     log.error("Error in hub event processor loop: {}", e.getMessage(), e);
                 }
@@ -45,17 +44,15 @@ public class HubEventProcessor implements Runnable {
 
     private void processRecords(Iterable<ConsumerRecord<String, HubEventAvro>> records) {
         for (ConsumerRecord<String, HubEventAvro> record : records) {
-            try {
-                hubService.processEvent(record.value());
-                hubEventConsumer.commitSync(
-                        Collections.singletonMap(
-                                new TopicPartition(record.topic(), record.partition()),
-                                new OffsetAndMetadata(record.offset() + 1, null)
-                        )
-                );
-            } catch (Exception e) {
-                log.error("Error processing hub event: {}", e.getMessage(), e);
-            }
+            log.info("Processing hub event record {}", record.offset());
+            hubService.processEvent(record.value());
+            hubEventConsumer.commitSync(
+                    Collections.singletonMap(
+                            new TopicPartition(record.topic(), record.partition()),
+                            new OffsetAndMetadata(record.offset() + 1, null)
+                    )
+            );
+            log.info("Finish processing snapshot event record {}", record.offset());
         }
     }
 

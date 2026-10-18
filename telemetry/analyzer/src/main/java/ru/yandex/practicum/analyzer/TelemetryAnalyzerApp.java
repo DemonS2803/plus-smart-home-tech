@@ -5,8 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ConfigurableApplicationContext;
-import ru.yandex.practicum.analyzer.runner.HubEventProcessor;
-import ru.yandex.practicum.analyzer.runner.SensorSnapshotProcessor;
+import ru.yandex.practicum.analyzer.runner.HubEventRunner;
+import ru.yandex.practicum.analyzer.runner.SensorSnapshotRunner;
 
 @Slf4j
 @SpringBootApplication
@@ -17,10 +17,10 @@ public class TelemetryAnalyzerApp {
         ConfigurableApplicationContext context =
                 SpringApplication.run(TelemetryAnalyzerApp.class, args);
 
-        final HubEventProcessor hubEventProcessor = context.getBean(HubEventProcessor.class);
-        SensorSnapshotProcessor snapshotProcessor = context.getBean(SensorSnapshotProcessor.class);
+        final HubEventRunner hubEventRunner = context.getBean(HubEventRunner.class);
+        SensorSnapshotRunner snapshotProcessor = context.getBean(SensorSnapshotRunner.class);
 
-        Thread hubEventsThread = new Thread(hubEventProcessor);
+        Thread hubEventsThread = new Thread(hubEventRunner);
         hubEventsThread.setName("HubEventHandlerThread");
         hubEventsThread.start();
 
@@ -30,7 +30,7 @@ public class TelemetryAnalyzerApp {
             log.info("Shutting down Analyzer service");
 
             try {
-                hubEventProcessor.getHubEventConsumer().wakeup();
+                hubEventRunner.getHubEventConsumer().wakeup();
                 hubEventsThread.join(5000);
             } catch (InterruptedException e) {
                 hubEventsThread.interrupt();
