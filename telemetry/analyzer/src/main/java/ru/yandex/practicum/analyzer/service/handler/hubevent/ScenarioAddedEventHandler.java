@@ -3,6 +3,8 @@ package ru.yandex.practicum.analyzer.service.handler.hubevent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.analyzer.model.*;
 import ru.yandex.practicum.analyzer.repository.ActionRepository;
 import ru.yandex.practicum.analyzer.repository.ConditionRepository;
@@ -87,6 +89,7 @@ public class ScenarioAddedEventHandler implements HubEventHandler {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void handle(HubEventAvro eventAvro) {
         ScenarioAddedEvent event = (ScenarioAddedEvent) getEvent(eventAvro);
 

@@ -3,6 +3,8 @@ package ru.yandex.practicum.analyzer.service.handler.hubevent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.analyzer.repository.ScenarioRepository;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.ScenarioRemovedEventAvro;
@@ -36,6 +38,7 @@ public class ScenarioRemovedEventHandler  implements HubEventHandler {
     }
 
     @Override
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     public void handle(HubEventAvro eventAvro) {
         ScenarioRemovedEvent event = (ScenarioRemovedEvent) getEvent(eventAvro);
 

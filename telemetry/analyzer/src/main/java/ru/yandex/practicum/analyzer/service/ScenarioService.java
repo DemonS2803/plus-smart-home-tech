@@ -56,10 +56,7 @@ public class ScenarioService {
 
         log.info("Processing snapshot for hub {}, {} sensors. State: {}", hubId, sensorsStateMap.size(), sensorsSnapshot);
 
-        for (Map.Entry<String, SensorStateAvro> entry : sensorsStateMap.entrySet()) {
-            String sensorId = entry.getKey();
-            saveSensor(sensorId, hubId);
-        }
+        saveSensors(sensorsStateMap, hubId);
 
         Map<String, List<ScenarioAction>> sensorActions = getSensorActions(hubId, sensorsStateMap);
 
@@ -76,17 +73,25 @@ public class ScenarioService {
         }
     }
 
-    private void saveSensor(String sensorId, String hubId) {
-        Sensor sensor = sensorRepository.findById(sensorId)
-                .orElse(null);
+    private void saveSensors(Map<String, SensorStateAvro> sensorsStateMap, String hubId) {
+        List<Sensor> existingSensors = sensorRepository.findAllById(sensorsStateMap.keySet());
+        Map<String, Sensor> existingSensorMap = existingSensors.stream()
+                .collect(Collectors.toMap(
+                        Sensor::getId,
+                        Function.identity()
+                ));
 
-        if (sensor == null) {
-            sensorRepository.save(new Sensor(sensorId, hubId));
-            log.info("New sensor registered: id={}, hubId={}", sensorId, hubId);
-            // if hub changed
-        } else if (!Objects.equals(sensor.getHubId(), hubId)) {
-            sensor.setHubId(hubId);
-            sensorRepository.save(sensor);
+        List<Sensor> sensorsToSave = new ArrayList<>();
+
+        List<Sensor> newSensors = sensorsStateMap.keySet().stream()
+                .filter(s -> !existingSensorMap.containsKey(s))
+                .map(s -> new Sensor(s, hubId))
+                .toList();
+
+
+        if (!newSensors.isEmpty()) {
+            log.info("Register new sensors for {}: {}", hubId, newSensors);
+            sensorRepository.saveAll(sensorsToSave);
         }
     }
 
