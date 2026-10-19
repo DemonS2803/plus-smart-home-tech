@@ -25,7 +25,6 @@ public class TelemetryControllerGrpc extends CollectorControllerGrpc.CollectorCo
     private final Map<SensorEventProto.PayloadCase, SensorEventHandler> sensorEventHandlers;
 
     public TelemetryControllerGrpc(
-            TelemetryService telemetryService,
             Set<HubEventHandler> hubEventHandlers,
             Set<SensorEventHandler> sensorEventHandlers
     ) {
