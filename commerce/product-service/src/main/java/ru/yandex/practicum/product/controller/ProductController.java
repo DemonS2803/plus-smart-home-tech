@@ -12,7 +12,8 @@ import ru.yandex.practicum.product.service.ProductService;
 
 import java.util.List;
 
-@RestController("/api/products")
+@RestController
+@RequestMapping("/api/products")
 @RequiredArgsConstructor
 public class ProductController {
 
@@ -28,9 +29,9 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductsByCategory(categoryId));
     }
 
-    @GetMapping("/category/search")
-    public ResponseEntity<List<ProductDto>> searchProducts(@RequestParam String search) {
-        return ResponseEntity.ok(productService.searchProductsByName(search));
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDto>> searchProducts(@RequestParam String query) {
+        return ResponseEntity.ok(productService.searchProductsByName(query));
     }
 
     @PostMapping

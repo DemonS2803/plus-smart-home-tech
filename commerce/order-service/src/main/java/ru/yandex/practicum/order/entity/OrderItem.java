@@ -24,20 +24,12 @@ public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private Long productId;
+    private String productName;
+    private Integer quantity = 0;
+    private BigDecimal price = BigDecimal.ZERO;
     @ManyToOne
-    @JoinColumn(name = "order_id", nullable = false)
+    @JoinColumn(name = "order_id")
     private Order order;
 
-    @Column(name = "product_id", nullable = false)
-    private Long productId;
-
-    @Column(name = "product_name", nullable = false)
-    private String productName;
-
-    @Column(name = "quantity", nullable = false)
-    private Integer quantity = 0;
-
-    @Column(name = "price", nullable = false, precision = 19, scale = 4)
-    private BigDecimal price = BigDecimal.ZERO;
 }

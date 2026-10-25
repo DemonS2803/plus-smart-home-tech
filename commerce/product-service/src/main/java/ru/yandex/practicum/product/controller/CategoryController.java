@@ -11,7 +11,8 @@ import ru.yandex.practicum.product.service.CategoryService;
 
 import java.util.List;
 
-@RestController("/api/categories")
+@RestController
+@RequestMapping("/api/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 

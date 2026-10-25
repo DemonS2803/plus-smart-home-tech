@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> getProductsByCategory(Long categoryId) {
-        return productRepository.findProductsByCategory_idAndActiveIsFalse(categoryId).stream()
+        return productRepository.findProductsByCategory_idAndActiveIsTrue(categoryId).stream()
                 .map(mapper::toDto)
                 .toList();
 
@@ -46,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> searchProductsByName(String searchString) {
-        return productRepository.findProductsByNameContainingAndActiveIsFalse(searchString).stream()
+        return productRepository.findProductsByNameContainingAndActiveIsTrue(searchString).stream()
                 .map(mapper::toDto)
                 .toList();
     }
