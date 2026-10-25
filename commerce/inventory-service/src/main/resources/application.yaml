@@ -2,8 +2,6 @@ spring:
   application:
     name: inventory-service
 
-  config:
-    import: "configserver:"
   cloud:
     config:
       discovery:

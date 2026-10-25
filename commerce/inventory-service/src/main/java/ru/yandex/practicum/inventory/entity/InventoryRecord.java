@@ -22,18 +22,11 @@ public class InventoryRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "product_id", nullable = false, unique = true)
     private Long productId;
-
-    @Column(name = "quantity", nullable = false)
     private Integer quantity = 0;
-
-    @Column(name = "reserved_quantity", nullable = false)
     private Integer reservedQuantity = 0;
 
     @Version
-    @Column(name = "version")
     private Long version;
 
     public Integer getAvailableQuantity() {
