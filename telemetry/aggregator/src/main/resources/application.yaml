@@ -1,8 +1,13 @@
-server:
-  port: 8082
-
 spring:
   application:
     name: aggregator
-  kafka:
-        bootstrap-servers: localhost:9092
+
+  config:
+    import: configserver:http://localhost:8889
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        use-random-policy: true
+        max-interval: 6000
+

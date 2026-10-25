@@ -7,7 +7,6 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.kafka.telemetry.event.HubEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
-import ru.yandex.practicum.telemetry.common.utils.KafkaConstants;
 
 @Slf4j
 @Service
@@ -16,11 +15,12 @@ public class TelemetryCollectorMessageBrokerImpl implements TelemetryCollectorMe
 
     private final KafkaProducer<String, HubEventAvro> hubEventProducer;
     private final KafkaProducer<String, SensorEventAvro> sensorEventProducer;
+    private final KafkaProducerConfiguration kafkaProducerConfiguration;
 
     @Override
     public void sendHubEvent(HubEventAvro event) {
         ProducerRecord<String, HubEventAvro> record =
-                new ProducerRecord<>(KafkaConstants.TOPIC_TELEMETRY_HUBS_V1, event);
+                new ProducerRecord<>(kafkaProducerConfiguration.getHubEventTopic(), event);
 
         log.debug("Sending sensor event {} to topic {}", event, record.topic());
         hubEventProducer.send(record);
@@ -29,7 +29,7 @@ public class TelemetryCollectorMessageBrokerImpl implements TelemetryCollectorMe
     @Override
     public void sendSensorEvent(SensorEventAvro event) {
         ProducerRecord<String, SensorEventAvro> record =
-                new ProducerRecord<>(KafkaConstants.TOPIC_TELEMETRY_SENSORS_V1, event);
+                new ProducerRecord<>(kafkaProducerConfiguration.getSensorEventTopic(), event);
 
         log.debug("Sending hub event {} to topic {}", event, record.topic());
         sensorEventProducer.send(record);
