@@ -1,7 +1,6 @@
 package ru.yandex.practicum.aggregator.app;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -15,7 +14,6 @@ import ru.yandex.practicum.aggregator.broker.KafkaProducerConfig;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
-import ru.yandex.practicum.telemetry.common.utils.KafkaConstants;
 
 import java.time.Duration;
 import java.time.Instant;
