@@ -1,25 +1,19 @@
 package ru.yandex.practicum.aggregator.app;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.kafka.clients.consumer.Consumer;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.errors.WakeupException;
-import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
 import ru.yandex.practicum.telemetry.common.utils.KafkaConstants;
-import ru.yandex.practicum.telemetry.serialization.avroschemas.deserialize.SensorEventDeserializer;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -33,6 +27,12 @@ public class AggregationStarter {
 
     private final KafkaConsumer<String, SensorEventAvro> sensorEventConsumer;
     private final KafkaProducer<String, SensorsSnapshotAvro> sensorSnapshotProducer;
+    /**
+     * Mapping hubId -> SensorsSnapshot[
+     *      sens1 -> SensorState,
+     *      sens2 -> SensorState
+     * ]
+     */
     private final Map<String, SensorsSnapshotAvro> hubSnapshotsMap = new ConcurrentHashMap<>();
 
     public void start() {
@@ -106,7 +106,7 @@ public class AggregationStarter {
         }
 
         // duplicate
-        if (oldState != null && oldState.getData().equals(event.getPayload())) {
+        if (oldState != null && isEqual(oldState.getData(), event.getPayload())) {
             log.debug("Ignoring duplicate event for device {} in hub {}", deviceId, hubId);
             return Optional.empty();
         }
@@ -121,8 +121,30 @@ public class AggregationStarter {
 
         hubSnapshotsMap.put(hubId, snapshot);
 
-        log.debug("Updated snapshot for hub {} with device {}", hubId, deviceId);
+        log.info("Updated snapshot for hub {} with device {} (current size {}): {}",
+                hubId, deviceId, snapshot.getSensorsState().size(), snapshot
+        );
         return Optional.of(snapshot);
+    }
+
+    public static boolean isEqual(Object data1, Object data2) {
+        log.debug("Compare snapshot for {}", data1.getClass());
+
+        if (data1 == data2) return true;
+
+        if (data1 instanceof SpecificRecord record1 &&data2 instanceof SpecificRecord record2) {
+
+            if (!record1.getSchema().equals(record2.getSchema())) return false;
+
+            // Сравнение всех полей по порядку
+            for (int i = 0; i < record1.getSchema().getFields().size(); i++) {
+                Object val1 = record1.get(i);
+                Object val2 = record2.get(i);
+                if (!Objects.deepEquals(val1, val2)) return false;
+            }
+            return true;
+        }
+        return false;
     }
 
 }
