@@ -1,0 +1,24 @@
+server:
+  port: 8082
+
+aggregator:
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    consumer:
+      bootstrap-address: ${aggregator.kafka.bootstrap-servers}
+      client-id: client.consumer.aggregator.sensors
+      group-id: group.aggregator
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: ru.yandex.practicum.telemetry.serialization.avroschemas.deserialize.SensorEventDeserializer
+      enable-auto-commit: false
+      topics:
+        - telemetry.sensors.v1
+
+    producer:
+      bootstrap-address: ${aggregator.kafka.bootstrap-servers}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: ru.yandex.practicum.telemetry.serialization.avroschemas.serialize.SensorSnapshotAvroSerializer
+      snapshot-topic: telemetry.snapshots.v1
+

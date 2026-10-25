@@ -1,6 +1,7 @@
 package ru.yandex.practicum.aggregator.app;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -10,6 +11,7 @@ import org.apache.kafka.common.errors.WakeupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.aggregator.broker.KafkaProducerConfig;
 import ru.yandex.practicum.kafka.telemetry.event.SensorEventAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorsSnapshotAvro;
 import ru.yandex.practicum.kafka.telemetry.event.SensorStateAvro;
@@ -27,6 +29,7 @@ public class AggregationStarter {
 
     private final KafkaConsumer<String, SensorEventAvro> sensorEventConsumer;
     private final KafkaProducer<String, SensorsSnapshotAvro> sensorSnapshotProducer;
+    private final KafkaProducerConfig sensorSnapshotProducerConfig;
     /**
      * Mapping hubId -> SensorsSnapshot[
      *      sens1 -> SensorState,
@@ -38,10 +41,7 @@ public class AggregationStarter {
     public void start() {
         try {
             log.info("Starting Aggregator service...");
-
-            sensorEventConsumer.subscribe(
-                    List.of(KafkaConstants.TOPIC_TELEMETRY_SENSORS_V1)
-            );
+            String snapshotsTopic = sensorSnapshotProducerConfig.getSnapshotsTopicName();
 
             // вроде в уроке про многопоточку учили так
             while (!Thread.currentThread().isInterrupted()) {
@@ -52,7 +52,7 @@ public class AggregationStarter {
 
                     if (updatedSnapshot.isPresent()) {
                         sensorSnapshotProducer.send(new ProducerRecord<>(
-                                KafkaConstants.TOPIC_TELEMETRY_SNAPSHOTS_V1,
+                                snapshotsTopic,
                                 record.value().getHubId(),
                                 updatedSnapshot.get()
                         ));

@@ -1,0 +1,26 @@
+server:
+  port: 8081
+
+collector:
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    hub-event-producer:
+      bootstrap-address: ${collector.kafka.bootstrap-servers}
+      key-serializer: org.apache.kafka.common.serialization.VoidSerializer
+      value-serializer: ru.yandex.practicum.telemetry.serialization.avroschemas.serialize.HubEventAvroSerializer
+      linger-ms: 0
+      batch-size: 1
+      hub-event-topic: telemetry.hubs.v1
+
+    sensor-event-producer:
+      bootstrap-address: ${collector.kafka.bootstrap-servers}
+      key-serializer: org.apache.kafka.common.serialization.VoidSerializer
+      value-serializer: ru.yandex.practicum.telemetry.serialization.avroschemas.serialize.SensorEventAvroSerializer
+      linger-ms: 1000
+      batch-size: 1000
+      sensor-event-topic: telemetry.sensors.v1
+
+grpc:
+  server:
+    port: 59091
