@@ -39,6 +39,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDto> getProducts() {
+        return productRepository.findProductsByActiveIsTrue().stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    @Override
     public List<ProductDto> getProductsByCategory(Long categoryId) {
         return productRepository.findProductsByCategory_idAndActiveIsTrue(categoryId).stream()
                 .map(mapper::toDto)
