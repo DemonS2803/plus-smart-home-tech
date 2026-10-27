@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.product.dto.CreateProductRequest;
 import ru.yandex.practicum.product.dto.ProductDto;
 import ru.yandex.practicum.product.dto.UpdateProductRequest;
+import ru.yandex.practicum.product.entity.Category;
 import ru.yandex.practicum.product.entity.Product;
 import ru.yandex.practicum.product.exception.NotFoundException;
 import ru.yandex.practicum.product.mapper.ProductMapper;
+import ru.yandex.practicum.product.repository.CategoryRepository;
 import ru.yandex.practicum.product.repository.ProductRepository;
 
 import java.util.List;
@@ -19,14 +21,14 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
     private final ProductMapper mapper;
 
     @Override
     public ProductDto getProductById(Long id) {
         Product product = getProductByIdOrThrow(id);
-        if (!product.getActive()) {
+        if (!Boolean.TRUE.equals(product.getActive())) {
             log.warn("User requested not active product: {}", product);
-            throw new NotFoundException(String.format("Product with id %s is not available", id));
         }
         return mapper.toDto(product);
     }
@@ -41,7 +43,6 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findProductsByCategory_idAndActiveIsTrue(categoryId).stream()
                 .map(mapper::toDto)
                 .toList();
-
     }
 
     @Override
@@ -54,8 +55,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto createProduct(CreateProductRequest request) {
         log.info("Creating new product: {}", request);
-        Product product = mapper.fromDto(request);
+        Category category = null;
+        if (request.categoryId() != null) {
+            category = categoryRepository.findById(request.categoryId())
+                    .orElseThrow(() -> new NotFoundException("Category with id " + request.categoryId() + " not found"));
+        }
 
+        Product product = mapper.fromDto(request);
+        product.setCategory(category);
         product = productRepository.save(product);
         log.info("Saved new product: {}", product);
         return mapper.toDto(product);

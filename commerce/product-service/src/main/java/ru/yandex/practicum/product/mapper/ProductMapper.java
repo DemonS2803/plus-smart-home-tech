@@ -1,6 +1,8 @@
 package ru.yandex.practicum.product.mapper;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.product.dto.CategoryDto;
 import ru.yandex.practicum.product.dto.CreateProductRequest;
 import ru.yandex.practicum.product.dto.ProductDto;
 import ru.yandex.practicum.product.dto.UpdateProductRequest;
@@ -8,7 +10,10 @@ import ru.yandex.practicum.product.entity.Category;
 import ru.yandex.practicum.product.entity.Product;
 
 @Component
+@RequiredArgsConstructor
 public class ProductMapper {
+
+    private final CategoryMapper categoryMapper;
 
     public Product fromDto(CreateProductRequest request) {
         Product product = new Product();
@@ -58,12 +63,15 @@ public class ProductMapper {
     }
 
     public ProductDto toDto(Product product) {
+        CategoryDto categoryDto = categoryMapper.toDto(product.getCategory());
         return ProductDto.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())
+                .category(categoryDto)
                 .price(product.getPrice())
                 .imageUrl(product.getImageUrl())
+                .active(product.getActive())
                 .build();
     }
 }

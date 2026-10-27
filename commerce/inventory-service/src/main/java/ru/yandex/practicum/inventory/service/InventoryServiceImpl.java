@@ -41,6 +41,10 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public InventoryDto createInventory(UpdateInventoryRequest request) {
         log.info("Creating inventory for product {}: quantity={}", request.productId(), request.quantity());
+        if (inventoryRepository.existsByProductId(request.productId())) {
+            log.warn("Inventory for product {} already exists", request.productId());
+            throw new IllegalArgumentException("Inventory for product " + request.productId() + " already exists");
+        }
         InventoryRecord record = mapper.fromDto(request);
         record = inventoryRepository.save(record);
         log.info("Created inventory for product {}: id={}", request.productId(), record.getId());
