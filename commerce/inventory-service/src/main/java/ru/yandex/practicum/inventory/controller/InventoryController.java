@@ -13,7 +13,8 @@ import ru.yandex.practicum.inventory.service.InventoryService;
 
 import java.util.List;
 
-@RestController("/api/inventory")
+@RestController
+@RequestMapping("/api/inventory")
 @RequiredArgsConstructor
 public class InventoryController {
 

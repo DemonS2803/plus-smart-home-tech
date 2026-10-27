@@ -19,3 +19,6 @@ CREATE TABLE IF NOT EXISTS products (
 
 CREATE INDEX IF NOT EXISTS idx_products_category_id ON products(category_id);
 CREATE INDEX IF NOT EXISTS idx_products_name ON products(name);
+
+CREATE SEQUENCE IF NOT EXISTS categories_seq INCREMENT BY 50;
+CREATE SEQUENCE IF NOT EXISTS products_seq INCREMENT BY 50;

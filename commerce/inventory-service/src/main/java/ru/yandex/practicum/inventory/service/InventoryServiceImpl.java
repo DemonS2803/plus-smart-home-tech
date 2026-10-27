@@ -61,23 +61,23 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public ReserveResponse reserveInventory(ReserveRequest request) {
         log.info("Reserving {} units for product {}", request.quantity(), request.productId());
-        InventoryRecord record = inventoryRepository.findByProductId(request.productId())
+        InventoryRecord dbRecord = inventoryRepository.findByProductId(request.productId())
                 .orElseThrow(() -> new NotFoundException(String.format("Inventory for product %s not found", request.productId())));
 
-        int availableQuantity = record.getAvailableQuantity();
+        int availableQuantity = dbRecord.getAvailableQuantity();
         if (availableQuantity < request.quantity()) {
             log.warn("Insufficient stock for product {}: available={}, requested={}",
                     request.productId(), availableQuantity, request.quantity());
             throw new InsufficientStockException(String.format(
-                    "Недостаточно товара для резервирования. Доступно: %d, запрошено: %d",
+                    "Unable to reserve inventory. Available: %d, Requested: %d",
                     availableQuantity, request.quantity()));
         }
 
-        record.setReservedQuantity(record.getReservedQuantity() + request.quantity());
-        record = inventoryRepository.save(record);
+        dbRecord.setReservedQuantity(dbRecord.getReservedQuantity() + request.quantity());
+        dbRecord = inventoryRepository.save(dbRecord);
         log.info("Reserved {} units for product {}. Available: {}",
-                request.quantity(), request.productId(), record.getAvailableQuantity());
+                request.quantity(), request.productId(), dbRecord.getAvailableQuantity());
 
-        return new ReserveResponse(true, record.getAvailableQuantity(), "Резерв успешно создан");
+        return new ReserveResponse(true, dbRecord.getAvailableQuantity(), "Product reserved successfully");
     }
 }

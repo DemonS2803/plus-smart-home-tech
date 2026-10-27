@@ -1,5 +1,3 @@
--- Inventory Service Schema
--- Database: inventory_db
 
 CREATE TABLE IF NOT EXISTS inventory_records (
     id BIGSERIAL PRIMARY KEY,
@@ -11,3 +9,5 @@ CREATE TABLE IF NOT EXISTS inventory_records (
 );
 
 CREATE INDEX IF NOT EXISTS idx_inventory_product_id ON inventory_records(product_id);
+
+CREATE SEQUENCE IF NOT EXISTS inventory_records_seq INCREMENT BY 50;

@@ -2,20 +2,13 @@ spring:
   application:
     name: inventory-service
 
+#  Отныне мы храним только линк на конфиг сервер
+#  Все остальное - вопросы к нему
   config:
-    import: "configserver:"
+    import: optional:configserver:http://localhost:8888/
   cloud:
     config:
-      discovery:
-        enabled: true
-        serviceId: config-server
       fail-fast: true
       retry:
         use-random-policy: true
         max-interval: 6000
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-

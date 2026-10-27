@@ -20,3 +20,6 @@ CREATE TABLE IF NOT EXISTS order_items (
 
 CREATE INDEX IF NOT EXISTS idx_order_items_order_id ON order_items(order_id);
 CREATE INDEX IF NOT EXISTS idx_orders_email ON orders(customer_email);
+
+CREATE SEQUENCE IF NOT EXISTS orders_seq INCREMENT BY 50;
+CREATE SEQUENCE IF NOT EXISTS order_items_seq INCREMENT BY 50;
