@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: inventory-service
+
+#  Отныне мы храним только линк на конфиг сервер
+#  Все остальное - вопросы к нему
+  config:
+    import: optional:configserver:http://localhost:8888/
+  cloud:
+    config:
+      fail-fast: true
+      retry:
+        use-random-policy: true
+        max-interval: 6000
