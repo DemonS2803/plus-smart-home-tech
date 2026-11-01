@@ -3,6 +3,7 @@ package ru.yandex.practicum.inventory.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.inventory.dto.InventoryDto;
 import ru.yandex.practicum.inventory.dto.ReserveRequest;
 import ru.yandex.practicum.inventory.dto.ReserveResponse;
@@ -39,6 +40,7 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
+    @Transactional
     public InventoryDto createInventory(UpdateInventoryRequest request) {
         log.info("Creating inventory for product {}: quantity={}", request.productId(), request.quantity());
         if (inventoryRepository.existsByProductId(request.productId())) {
@@ -52,6 +54,7 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
+    @Transactional
     public InventoryDto updateInventory(UpdateInventoryRequest request) {
         log.info("Updating inventory for product {}: quantity={}", request.productId(), request.quantity());
         InventoryRecord record = inventoryRepository.findByProductId(request.productId())
@@ -63,6 +66,7 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
+    @Transactional
     public ReserveResponse reserveInventory(ReserveRequest request) {
         log.info("Reserving {} units for product {}", request.quantity(), request.productId());
         InventoryRecord dbRecord = inventoryRepository.findByProductId(request.productId())

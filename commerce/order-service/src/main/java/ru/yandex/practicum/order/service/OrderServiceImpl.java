@@ -3,6 +3,7 @@ package ru.yandex.practicum.order.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.order.dto.CreateOrderRequest;
 import ru.yandex.practicum.order.dto.OrderDto;
 import ru.yandex.practicum.order.entity.Order;
@@ -21,6 +22,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderMapper mapper;
 
     @Override
+    @Transactional
     public OrderDto createOrder(CreateOrderRequest request) {
         log.info("Creating new order for customer: {} ({})", request.customerName(), request.customerEmail());
         Order order = mapper.fromDto(request);

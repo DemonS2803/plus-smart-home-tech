@@ -3,6 +3,7 @@ package ru.yandex.practicum.product.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.product.dto.CategoryDto;
 import ru.yandex.practicum.product.dto.CreateCategoryRequest;
 import ru.yandex.practicum.product.entity.Category;
@@ -39,6 +40,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDto createCategory(CreateCategoryRequest createCategoryRequest) {
         log.info("Creating new category: {}", createCategoryRequest);
         Category category = categoryMapper.fromDto(createCategoryRequest);

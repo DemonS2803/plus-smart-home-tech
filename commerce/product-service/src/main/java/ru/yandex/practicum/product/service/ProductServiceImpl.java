@@ -3,6 +3,7 @@ package ru.yandex.practicum.product.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.product.dto.CreateProductRequest;
 import ru.yandex.practicum.product.dto.ProductDto;
 import ru.yandex.practicum.product.dto.UpdateProductRequest;
@@ -60,6 +61,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductDto createProduct(CreateProductRequest request) {
         log.info("Creating new product: {}", request);
         Category category = null;
@@ -76,6 +78,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ProductDto updateProduct(Long id, UpdateProductRequest request) {
         log.info("Updating product with id {}: {}", id, request);
         Product dbProduct = getProductByIdOrThrow(id);
