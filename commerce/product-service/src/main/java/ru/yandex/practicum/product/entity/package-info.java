@@ -1,4 +1,4 @@
 /**
- * TODO: реализуйте JPA-сущности каталога товаров.
+ * JPA-сущности каталога и товаров.
  */
 package ru.yandex.practicum.product.entity;

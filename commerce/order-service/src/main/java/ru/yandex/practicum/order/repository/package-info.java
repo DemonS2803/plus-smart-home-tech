@@ -1,4 +1,4 @@
 /**
- * TODO: реализуйте Spring Data репозиторий для заказов.
+ * JPA репозиторий для заказов.
  */
 package ru.yandex.practicum.order.repository;

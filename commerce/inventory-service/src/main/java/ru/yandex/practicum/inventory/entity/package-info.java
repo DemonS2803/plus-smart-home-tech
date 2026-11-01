@@ -1,4 +1,4 @@
 /**
- * TODO: реализуйте JPA-сущность складской записи.
+ * JPA-сущности складской записи.
  */
 package ru.yandex.practicum.inventory.entity;
