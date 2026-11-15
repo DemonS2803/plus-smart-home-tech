@@ -93,3 +93,13 @@ resilience4j:
       default:
         max-attempts: 3
         wait-duration: 500ms
+
+app:
+  security:
+    users:
+      - username: ivan
+        password: ivan
+        roles: [USER]
+      - username: anna
+        password: anna
+        roles: [USER, ADMIN]
