@@ -15,3 +15,5 @@ spring:
           search-locations:
             - classpath:/config-repo
             - classpath:/config-repo/commerce
+            - classpath:/config-repo/telemetry
+            - classpath:/config-repo/infra

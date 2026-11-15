@@ -1,0 +1,85 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: order-service-route
+          uri: lb://order-service
+          predicates:
+            - Path=/orders/**
+          filters:
+            - name: RewritePath
+              args:
+                regexp: /orders(.*)
+                replacement: /api/orders$1
+
+        - id: order-service-route-api
+          uri: lb://order-service
+          predicates:
+            - Path=/api/orders/**
+
+        - id: product-service-route
+          uri: lb://product-service
+          predicates:
+            - Path=/products/**,/categories/**
+          filters:
+            - name: RewritePath
+              args:
+                regexp: /products(.*)
+                replacement: /api/products$1
+            - name: Retry
+              args:
+                exceptions-to-ignore:
+                  - ru.yandex.practicum.product.exception.NotFoundException
+                methods: GET
+                retries: 3
+
+        - id: product-service-route-api
+          uri: lb://product-service
+          predicates:
+            - Path=/api/products/**,/api/categories/**
+          filters:
+            - name: Retry
+              args:
+                exceptions-to-ignore:
+                  - ru.yandex.practicum.product.exception.NotFoundException
+                methods: GET
+                retries: 3
+
+        - id: inventory-service-route
+          uri: lb://inventory-service
+          predicates:
+            - Path=/inventory/**
+          filters:
+            - name: RewritePath
+              args:
+                regexp: /inventory(.*)
+                replacement: /api/inventory$1
+
+        - id: inventory-service-route-api
+          uri: lb://inventory-service
+          predicates:
+            - Path=/api/inventory/**
+
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 10
+        permitted-numbers-of-calls-in-half-open-state: 5
+        automatic-transition-from-open-to-half-open-enabled: true
+        wait-duration-in-open-state: 5s
+    instances:
+      productCircuitBreaker:
+        base-config: default
+  retry:
+    configs:
+      default:
+        max-attempts: 3
+        wait-duration: 500ms
