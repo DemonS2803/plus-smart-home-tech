@@ -8,7 +8,10 @@ spring:
     import: optional:configserver:http://localhost:8888/
   cloud:
     config:
-      fail-fast: true
+      discovery:
+        enabled: true
+        service-id: config-server
+      fail-fast: false
       retry:
         use-random-policy: true
         max-interval: 6000
