@@ -7,6 +7,14 @@ spring:
       discovery:
         locator:
           enabled: true
+      default-filters:
+        - name: Retry
+          args:
+            exceptions-to-ignore:
+              - ru.yandex.practicum.product.exception.NotFoundException
+            methods: GET
+            retries: 3
+
       routes:
         - id: order-service-route
           uri: lb://order-service
@@ -26,30 +34,32 @@ spring:
         - id: product-service-route
           uri: lb://product-service
           predicates:
-            - Path=/products/**,/categories/**
+            - Path=/products/**
           filters:
             - name: RewritePath
               args:
                 regexp: /products(.*)
                 replacement: /api/products$1
-            - name: Retry
-              args:
-                exceptions-to-ignore:
-                  - ru.yandex.practicum.product.exception.NotFoundException
-                methods: GET
-                retries: 3
 
         - id: product-service-route-api
           uri: lb://product-service
           predicates:
-            - Path=/api/products/**,/api/categories/**
+            - Path=/api/products/**
+
+        - id: categories-service-route
+          uri: lb://product-service
+          predicates:
+            - Path=/categories/**
           filters:
-            - name: Retry
+            - name: RewritePath
               args:
-                exceptions-to-ignore:
-                  - ru.yandex.practicum.product.exception.NotFoundException
-                methods: GET
-                retries: 3
+                regexp: /categories(.*)
+                replacement: /api/categories$1
+
+        - id: categories-service-route-api
+          uri: lb://product-service
+          predicates:
+            - Path=/api/categories/**
 
         - id: inventory-service-route
           uri: lb://inventory-service
