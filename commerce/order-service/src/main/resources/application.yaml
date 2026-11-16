@@ -5,6 +5,16 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888/
   cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
+      client:
+        config:
+          default:
+            connectTimeout: 3000
+            readTimeout: 3000
+            loggerLevel: basic
+
     config:
       discovery:
         enabled: true
@@ -13,3 +23,29 @@ spring:
       retry:
         use-random-policy: true
         max-interval: 6000
+
+
+# Resilience4j Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      inventory-service:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+      product-service:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+
+  timelimiter:
+    instances:
+      inventory-service:
+        timeout-duration: 3s
+      product-service:
+        timeout-duration: 3s
+

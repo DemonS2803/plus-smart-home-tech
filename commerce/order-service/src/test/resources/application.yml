@@ -1,4 +1,4 @@
-# Тестовая конфигурация: H2 вместо PostgreSQL.
+# Тестовая конфигурация: H2 вместо PostgreSQL, Feign fallback.
 spring:
   cloud:
     config:
@@ -17,3 +17,35 @@ spring:
 eureka:
   client:
     enabled: false
+
+# Feign: включить circuit breaker и логгирование
+feign:
+  circuitbreaker:
+    enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 2000
+        loggerLevel: basic
+
+# Resilience4j для тестов: минимальные задержки
+resilience4j:
+  circuitbreaker:
+    instances:
+      inventory-service:
+        sliding-window-size: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 2
+      product-service:
+        sliding-window-size: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 5s
+        permitted-number-of-calls-in-half-open-state: 2
+  timelimiter:
+    instances:
+      inventory-service:
+        timeout-duration: 2s
+      product-service:
+        timeout-duration: 2s
