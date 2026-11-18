@@ -33,6 +33,14 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Ошибка валидации", errors);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIllegalArgumentsException(IllegalArgumentException e) {
+        Map<String, String> errors = new HashMap<>();
+        log.warn("Некорректный запрос: {}", errors);
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Некорректный запрос", errors);
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleGeneral(Exception e) {

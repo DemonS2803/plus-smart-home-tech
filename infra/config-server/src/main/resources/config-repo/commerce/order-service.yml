@@ -14,3 +14,18 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: true
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 3
+        automatic-transition-from-open-to-half-open-enabled: true
+
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 3s

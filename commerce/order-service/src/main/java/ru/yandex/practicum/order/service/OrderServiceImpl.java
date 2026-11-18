@@ -18,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
+    private final ItemAvailabilityService itemAvailabilityService;
     private final OrderRepository orderRepository;
     private final OrderMapper mapper;
 
@@ -26,6 +27,11 @@ public class OrderServiceImpl implements OrderService {
     public OrderDto createOrder(CreateOrderRequest request) {
         log.info("Creating new order for customer: {} ({})", request.customerName(), request.customerEmail());
         Order order = mapper.fromDto(request);
+
+        if (!itemAvailabilityService.checkItemsAvailable(request.items())) {
+            log.warn("Requested items unavailable. Retry request later");
+            throw new IllegalArgumentException("Requested items unavailable");
+        }
 
         order = orderRepository.save(order);
         log.info("Order created with id: {}", order.getId());

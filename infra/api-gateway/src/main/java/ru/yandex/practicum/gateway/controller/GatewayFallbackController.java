@@ -19,8 +19,7 @@ public class GatewayFallbackController {
                 .status(503)
                 .body(Map.of(
                         "error", "Service temporarily unavailable",
-                        "service", "product-service",
-                        "message", "The product service is currently unavailable. Please try again later."
+                        "message", "Service is currently unavailable. Please try again later."
                 ));
     }
 }
